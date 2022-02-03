@@ -119,7 +119,7 @@ public class AddCommand extends SimpleSubCommand {
 			return;
 		}
 
-		if (args.length > 2) {
+		if (args.length != 2) {
 			Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
 			return;
 		}
