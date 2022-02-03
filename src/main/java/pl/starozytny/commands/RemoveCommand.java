@@ -4,7 +4,6 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.PlayerUtil;
@@ -24,28 +23,13 @@ public class RemoveCommand extends SimpleSubCommand {
 	}
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
-	
+
 	public CompletableFuture<Boolean> isMiniyt(UUID who) {
 		return luckPerms.getUserManager().loadUser(who)
 				.thenApplyAsync(user -> {
 					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
 					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
 				});
-	}
-
-	public boolean informIfMiniyt(CommandSender sender, UUID who) {
-		isMiniyt(who).thenAcceptAsync(result -> {
-			if (result) {
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
-
-				Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
-
-			} else {
-				Common.tell(sender, MessageFile.Error.NO_MINIYT);
-			}
-		});
-		return false;
 	}
 
 	public CompletableFuture<Boolean> isMedia(UUID who) {
@@ -56,23 +40,6 @@ public class RemoveCommand extends SimpleSubCommand {
 				});
 	}
 
-	public boolean informIfMedia(CommandSender sender, UUID who) {
-		isMedia(who).thenAcceptAsync(result -> {
-			if (result) {
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
-
-				Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
-
-			} else {
-				Common.tell(sender, MessageFile.Error.NO_MEDIA);
-
-			}
-
-		});
-		return false;
-	}
-
 	public CompletableFuture<Boolean> isMediaplus(UUID who) {
 		return luckPerms.getUserManager().loadUser(who)
 				.thenApplyAsync(user -> {
@@ -81,19 +48,53 @@ public class RemoveCommand extends SimpleSubCommand {
 				});
 	}
 
-	public boolean informIfMediaplus(CommandSender sender, UUID who) {
-		isMediaplus(who).thenAcceptAsync(result -> {
-			if (result) {
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+	public boolean ExecuteCommand(UUID who) {
+		switch (args[1]) {
+			case "miniyt":
+				isMiniyt(who).thenAcceptAsync(result -> {
+					if (result) {
+						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-				Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
+						Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
 
-			} else {
-				Common.tell(sender, MessageFile.Error.NO_MEDIA_PLUS);
-			}
+					} else {
+						Common.tell(sender, MessageFile.Error.NO_MINIYT);
 
-		});
+					}
+				});
+				return false;
+			case "media":
+				isMedia(who).thenAcceptAsync(result -> {
+					if (result) {
+						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+
+						Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
+
+					} else {
+						Common.tell(sender, MessageFile.Error.NO_MEDIA);
+
+					}
+
+				});
+				return false;
+			case "media+":
+				isMediaplus(who).thenAcceptAsync(result -> {
+					if (result) {
+						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+
+						Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
+
+					} else {
+						Common.tell(sender, MessageFile.Error.NO_MEDIA_PLUS);
+
+					}
+
+				});
+				return false;
+		}
 		return false;
 	}
 
@@ -124,25 +125,7 @@ public class RemoveCommand extends SimpleSubCommand {
 					Player target = Bukkit.getPlayer(args[0]);
 					UUID targetUUID = target.getUniqueId();
 					if (AllowedRanks.contains(args[1])) {
-						if (Objects.equals(args[1], "miniyt")) {
-							if (informIfMiniyt(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-								return;
-							}
-						}
-						if (Objects.equals(args[1], "media")) {
-
-							if (informIfMedia(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-								return;
-							}
-						}
-						if (Objects.equals(args[1], "media+")) {
-
-							if (informIfMediaplus(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-								return;
-							}
-						}
-
-
+						ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
 						return;
 					}
 					Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);

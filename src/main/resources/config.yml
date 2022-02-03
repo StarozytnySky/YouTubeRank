@@ -1,3 +1,6 @@
+# youtube.add = dodawanie rangi
+# youtube.remove = zabieranie rangi
+# youtube.reload = przeładowanie wtyczki
 Settings:
 
   ALLOWED_USERS:

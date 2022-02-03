@@ -4,7 +4,6 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.PlayerUtil;
@@ -25,8 +24,31 @@ public class AddCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
+	public CompletableFuture<Boolean> isMiniyt(UUID who) {
+		return luckPerms.getUserManager().loadUser(who)
+				.thenApplyAsync(user -> {
+					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
+				});
+	}
 
-	public boolean ExecuteCommand(CommandSender sender, UUID who) {
+	public CompletableFuture<Boolean> isMedia(UUID who) {
+		return luckPerms.getUserManager().loadUser(who)
+				.thenApplyAsync(user -> {
+					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
+				});
+	}
+
+	public CompletableFuture<Boolean> isMediaplus(UUID who) {
+		return luckPerms.getUserManager().loadUser(who)
+				.thenApplyAsync(user -> {
+					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
+				});
+	}
+
+	public boolean ExecuteCommand(UUID who) {
 		switch (args[1]) {
 			case "miniyt":
 				isMiniyt(who).thenAcceptAsync(result -> {
@@ -74,30 +96,6 @@ public class AddCommand extends SimpleSubCommand {
 		return false;
 	}
 
-	public CompletableFuture<Boolean> isMiniyt(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
-				});
-	}
-
-	public CompletableFuture<Boolean> isMedia(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
-				});
-	}
-
-	public CompletableFuture<Boolean> isMediaplus(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
-				});
-	}
-
 	@Override
 	protected void onCommand() {
 
@@ -125,25 +123,7 @@ public class AddCommand extends SimpleSubCommand {
 					Player target = Bukkit.getPlayer(args[0]);
 					UUID targetUUID = target.getUniqueId();
 					if (AllowedRanks.contains(args[1])) {
-						if (Objects.equals(args[1], "miniyt")) {
-							if (ExecuteCommand(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-								return;
-							}
-						}
-						if (Objects.equals(args[1], "media")) {
-
-							if (ExecuteCommand(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-								return;
-							}
-						}
-						if (Objects.equals(args[1], "media+")) {
-
-							if (ExecuteCommand(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-								return;
-							}
-						}
-
-
+						ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
 						return;
 					}
 					Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
