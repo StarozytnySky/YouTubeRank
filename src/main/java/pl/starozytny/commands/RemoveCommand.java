@@ -24,8 +24,7 @@ public class RemoveCommand extends SimpleSubCommand {
 	}
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
-
-
+	
 	public CompletableFuture<Boolean> isMiniyt(UUID who) {
 		return luckPerms.getUserManager().loadUser(who)
 				.thenApplyAsync(user -> {
