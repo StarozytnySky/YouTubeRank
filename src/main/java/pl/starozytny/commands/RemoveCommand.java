@@ -119,6 +119,11 @@ public class RemoveCommand extends SimpleSubCommand {
 			return;
 		}
 
+		if (args.length > 2) {
+			Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
+			return;
+		}
+		
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));
 
 

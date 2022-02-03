@@ -28,6 +28,7 @@ public class MessageFile extends SimpleLocalization {
 		public static String NO_PERMISSION;
 		public static String ONLY_SPECIFIC_RANK;
 		public static String YOU_ARE_NO_LIST;
+		public static String TOO_MANY_ARGS;
 
 		public static String NO_MINIYT;
 		public static String NO_MEDIA;
@@ -43,6 +44,7 @@ public class MessageFile extends SimpleLocalization {
 			NO_PERMISSION = getString("NO_PERMISSION");
 			ONLY_SPECIFIC_RANK = getString("ONLY_SPECIFIC_RANK");
 			YOU_ARE_NO_LIST = getString("YOU_ARE_NO_LIST");
+			TOO_MANY_ARGS = getString("TOO_MANY_ARGS");
 
 			NO_MINIYT = getString("NO_MINIYT");
 			NO_MEDIA = getString("NO_MEDIA");

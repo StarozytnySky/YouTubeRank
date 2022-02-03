@@ -5,6 +5,7 @@ Error:
   NO_PERMISSION: "&cNie posiadasz uprawnien"
   ONLY_SPECIFIC_RANK: "&3[&fYou&cYube&3] &cMożesz modyfikować tylko rangi: miniyt, media, media+"
   YOU_ARE_NO_LIST: "&3[&fYou&cYube&3] &cNie znajdujesz się na liście"
+  TOO_MANY_ARGS: "&3[&fYou&cYube&3] &cPodano za dużo argumentów"
 
   NO_MINIYT: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6miniyt"
   NO_MEDIA: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media"
