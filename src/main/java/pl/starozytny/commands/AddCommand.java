@@ -25,7 +25,6 @@ public class AddCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
-
 	public CompletableFuture<Boolean> isMiniyt(UUID who) {
 		return luckPerms.getUserManager().loadUser(who)
 				.thenApplyAsync(user -> {
@@ -35,20 +34,19 @@ public class AddCommand extends SimpleSubCommand {
 	}
 
 	public boolean informIfMiniyt(CommandSender sender, UUID who) {
-		if (args[1].contains("miniyt")) {
 
-			isMiniyt(who).thenAcceptAsync(result -> {
-				if (!result) {
-					Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-					Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+		isMiniyt(who).thenAcceptAsync(result -> {
+			if (!result) {
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-					Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
+				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
 
-				} else {
-					Common.tell(sender, MessageFile.Error.HAVE_NOW_MINIYT);
-				}
-			});
-		}
+			} else {
+				Common.tell(sender, MessageFile.Error.HAVE_NOW_MINIYT);
+			}
+		});
+		//}
 		return false;
 	}
 
@@ -61,22 +59,19 @@ public class AddCommand extends SimpleSubCommand {
 	}
 
 	public boolean informIfMedia(CommandSender sender, UUID who) {
-		if (args[1].contains("media") && !args[1].endsWith("+")) {
+		isMedia(who).thenAcceptAsync(result -> {
+			if (!result) {
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-			isMedia(who).thenAcceptAsync(result -> {
-				if (!result) {
-					Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-					Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
 
-					Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
+			} else {
+				Common.tell(sender, MessageFile.Error.HAVE_NOW_MEDIA);
 
-				} else {
-					Common.tell(sender, MessageFile.Error.HAVE_NOW_MEDIA);
+			}
 
-				}
-
-			});
-		}
+		});
 		return false;
 	}
 
@@ -89,20 +84,19 @@ public class AddCommand extends SimpleSubCommand {
 	}
 
 	public boolean informIfMediaplus(CommandSender sender, UUID who) {
-		if (args[1].contains("media") && args[1].endsWith("+")) {
-			isMediaplus(who).thenAcceptAsync(result -> {
-				if (!result) {
-					Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-					Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-					Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
+		isMediaplus(who).thenAcceptAsync(result -> {
+			if (!result) {
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-				} else {
-					Common.tell(sender, MessageFile.Error.HAVE_NOW_MEDIA_PLUS);
-				}
+				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
 
-			});
-		}
+			} else {
+				Common.tell(sender, MessageFile.Error.HAVE_NOW_MEDIA_PLUS);
+			}
+
+		});
 		return false;
 	}
 
@@ -133,15 +127,22 @@ public class AddCommand extends SimpleSubCommand {
 					Player target = Bukkit.getPlayer(args[0]);
 					UUID targetUUID = target.getUniqueId();
 					if (AllowedRanks.contains(args[1])) {
-						if (informIfMiniyt(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-							return;
+						if (Objects.equals(args[1], "miniyt")) {
+							if (informIfMiniyt(sender, UUID.fromString(String.valueOf(targetUUID)))) {
+								return;
+							}
 						}
+						if (Objects.equals(args[1], "media")) {
 
-						if (informIfMediaplus(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-							return;
+							if (informIfMedia(sender, UUID.fromString(String.valueOf(targetUUID)))) {
+								return;
+							}
 						}
-						if (informIfMedia(sender, UUID.fromString(String.valueOf(targetUUID)))) {
-							return;
+						if (Objects.equals(args[1], "media+")) {
+
+							if (informIfMediaplus(sender, UUID.fromString(String.valueOf(targetUUID)))) {
+								return;
+							}
 						}
 
 
