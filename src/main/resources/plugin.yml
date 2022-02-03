@@ -1,0 +1,10 @@
+name: YouTubeRank
+version: ${project.version}
+main: ${main.class}
+api-version: 1.13
+author: ${author}
+
+commands:
+
+libraries:
+  - org.openjdk.nashorn:nashorn-core:15.3

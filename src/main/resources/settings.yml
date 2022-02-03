@@ -1,0 +1,8 @@
+Command_Aliases:
+  - 'youtube'
+
+Prefix: "&3[&fYou&cTube&3]"
+Locale: "en"
+
+# Internal version number. Do not change!
+Version: 1

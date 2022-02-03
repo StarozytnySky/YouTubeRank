@@ -1,0 +1,12 @@
+Settings:
+
+  ALLOWED_USERS:
+    - "Starozytny"
+
+  Commands:
+    Add:
+      SERVER: "lp user {player} parent addtemp {rank} 30d"
+      BUNGEE: "chc forward bungee lpb user {player} parent addtemp {rank} 30d"
+    Remove:
+      SERVER: "lp user {player} parent removetemp {rank}"
+      BUNGEE: "chc forward bungee lpb user {player} parent removetemp {rank}"

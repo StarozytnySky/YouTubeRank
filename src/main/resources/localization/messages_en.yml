@@ -1,0 +1,27 @@
+Reload:
+  RELOADED: "&3[&fYou&cYube&3] &aWtyczka zostala przeladowana"
+
+Error:
+  NO_PERMISSION: "&cNie posiadasz uprawnien"
+  ONLY_SPECIFIC_RANK: "&3[&fYou&cYube&3] &cMożesz modyfikować tylko rangi: miniyt, media, media+"
+  YOU_ARE_NO_LIST: "&3[&fYou&cYube&3] &cNie znajdujesz się na liście"
+
+  NO_MINIYT: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6miniyt"
+  NO_MEDIA: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media"
+  NO_MEDIA+: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media+"
+
+  HAVE_NOW_MINIYT: "&3[&fYou&cYube&3] &cGracz posiada już range &6miniyt"
+  HAVE_NOW_MEDIA: "&3[&fYou&cYube&3] &cGracz posiada już range &6media"
+  HAVE_NOW_MEDIA+: "&3[&fYou&cYube&3] &cGracz posiada już range &6media+"
+
+Usage:
+  ADD_RANK: "&3[&fYou&cYube&3] &cPoprawnie: &6/youtube add <nick> <ranga>"
+  REMOVE_RANK: "&3[&fYou&cYube&3] &cPoprawnie: &6/youtube remove <nick> <ranga>"
+  MISSING_RANK: "&3[&fYou&cYube&3] &cBrakuje agrumentu z ranga"
+
+Success:
+  ADDED: "&3[&fYou&cYube&3] &2Ranga &3{rank} &2zostala nadana graczowi &6{player}"
+  REMOVED: "&3[&fYou&cYube&3] &cRanga &3{rank} &czostala odebrana graczowi &6{player}"
+
+# Internal version number. Do not change!
+Version: 1
