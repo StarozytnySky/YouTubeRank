@@ -48,7 +48,7 @@ public class RemoveCommand extends SimpleSubCommand {
 		return null;
 	}
 
-	public boolean ExecuteCommand(UUID who) {
+	public void ExecuteCommand(UUID who) {
 		hasGroup(who).thenAcceptAsync(result -> {
 			if (result) {
 
@@ -59,9 +59,7 @@ public class RemoveCommand extends SimpleSubCommand {
 
 			} else
 				Common.tell(sender, MessageFile.Error.NO_HAVE_RANK.replace("{rank}", args[1]));
-
 		});
-		return false;
 	}
 
 	@Override
@@ -70,14 +68,10 @@ public class RemoveCommand extends SimpleSubCommand {
 		if (args.length == 0) {
 			Common.tell(sender, MessageFile.Usage.REMOVE_RANK);
 			return;
-		}
-
-		if (args.length == 1) {
+		} else if (args.length == 1) {
 			Common.tell(sender, MessageFile.Usage.MISSING_RANK);
 			return;
-		}
-
-		if (args.length != 2) {
+		} else if (args.length != 2) {
 			Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
 			return;
 		}
@@ -89,8 +83,9 @@ public class RemoveCommand extends SimpleSubCommand {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
 				Player target = Bukkit.getPlayer(args[0]);
 				UUID targetUUID = target.getUniqueId();
+
 				if (AllowedRanks.contains(args[1])) {
-					ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
+					ExecuteCommand(targetUUID);
 					return;
 				}
 				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);

@@ -24,32 +24,18 @@ public class AddCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
-	public CompletableFuture<Boolean> hasGroup(UUID who) {
-		switch (args[1]) {
-			case "miniyt":
-				return luckPerms.getUserManager().loadUser(who)
-						.thenApplyAsync(user -> {
-							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
-						});
-			case "media":
-				return luckPerms.getUserManager().loadUser(who)
-						.thenApplyAsync(user -> {
-							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
-						});
-			case "media+":
-				return luckPerms.getUserManager().loadUser(who)
-						.thenApplyAsync(user -> {
-							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
-						});
-		}
-		return null;
+
+	public CompletableFuture<Boolean> hasGroup(String group, UUID who) {
+
+		return luckPerms.getUserManager().loadUser(who)
+				.thenApplyAsync(user -> {
+					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+					return inheritedGroups.stream().anyMatch(g -> g.getName().equals(group));
+				});
 	}
 
-	public void ExecuteCommand(UUID who) {
-		hasGroup(who).thenAcceptAsync(result -> {
+	public void ExecuteCommand(String group, UUID who) {
+		hasGroup(group, who).thenAcceptAsync(result -> {
 			if (!result) {
 
 				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
@@ -59,7 +45,6 @@ public class AddCommand extends SimpleSubCommand {
 
 			} else
 				Common.tell(sender, MessageFile.Error.HAVE_NOW_RANK.replace("{rank}", args[1]));
-
 		});
 	}
 
@@ -69,28 +54,26 @@ public class AddCommand extends SimpleSubCommand {
 		if (args.length == 0) {
 			Common.tell(sender, MessageFile.Usage.ADD_RANK);
 			return;
-		}
-
-		if (args.length == 1) {
+		} else if (args.length == 1) {
 			Common.tell(sender, MessageFile.Usage.MISSING_RANK);
 			return;
-		}
-
-		if (args.length != 2) {
+		} else if (args.length != 2) {
 			Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
 			return;
 		}
 
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));
 
+		Player target = Bukkit.getPlayer(args[0]);
+		UUID targetUUID = target.getUniqueId();
+		String group = luckPerms.getGroupManager().getGroup(args[1]).getName();
 
 		if (PlayerUtil.hasPerm(sender, "youtube.add")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
-				Player target = Bukkit.getPlayer(args[0]);
-				assert target != null;
-				UUID targetUUID = target.getUniqueId();
+
+
 				if (AllowedRanks.contains(args[1])) {
-					ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
+					ExecuteCommand(group, targetUUID);
 					return;
 				}
 				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
