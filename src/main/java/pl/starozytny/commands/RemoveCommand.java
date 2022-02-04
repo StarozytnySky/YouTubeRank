@@ -65,15 +65,15 @@ public class RemoveCommand extends SimpleSubCommand {
 	@Override
 	protected void onCommand() {
 
-		if (args.length == 0) {
-			Common.tell(sender, MessageFile.Usage.REMOVE_RANK);
+		if (args.length != 2) {
+			if (args.length == 0) {
+				Common.tell(sender, MessageFile.Usage.ADD_RANK);
+			} else if (args.length == 1) {
+				Common.tell(sender, MessageFile.Usage.MISSING_RANK);
+			} else
+				Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
 			return;
-		} else if (args.length == 1) {
-			Common.tell(sender, MessageFile.Usage.MISSING_RANK);
-			return;
-		} else if (args.length != 2) {
-			Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
-			return;
+
 		}
 
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));

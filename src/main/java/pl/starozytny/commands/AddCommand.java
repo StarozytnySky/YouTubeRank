@@ -34,38 +34,38 @@ public class AddCommand extends SimpleSubCommand {
 				});
 	}
 
-	public void ExecuteCommand(String group, UUID who) {
+	public void manageRank(String group, UUID who, String nickName) {
 		hasGroup(group, who).thenAcceptAsync(result -> {
 			if (!result) {
 
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", nickName).replace("{rank}", group));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", nickName).replace("{rank}", group));
 
-				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
+				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", group).replace("{player}", nickName));
 
 			} else
-				Common.tell(sender, MessageFile.Error.HAVE_NOW_RANK.replace("{rank}", args[1]));
+				Common.tell(sender, MessageFile.Error.HAVE_NOW_RANK.replace("{rank}", group));
 		});
 	}
 
 	@Override
 	protected void onCommand() {
 
-		if (args.length == 0) {
-			Common.tell(sender, MessageFile.Usage.ADD_RANK);
+		if (args.length != 2) {
+			if (args.length == 0) {
+				Common.tell(sender, MessageFile.Usage.ADD_RANK);
+			} else if (args.length == 1) {
+				Common.tell(sender, MessageFile.Usage.MISSING_RANK);
+			} else
+				Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
 			return;
-		} else if (args.length == 1) {
-			Common.tell(sender, MessageFile.Usage.MISSING_RANK);
-			return;
-		} else if (args.length != 2) {
-			Common.tell(sender, MessageFile.Error.TOO_MANY_ARGS);
-			return;
+
 		}
 
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));
 
-		Player target = Bukkit.getPlayer(args[0]);
-		UUID targetUUID = target.getUniqueId();
+		Player player = Bukkit.getPlayer(args[0]);
+		UUID targetUUID = player.getUniqueId();
 		String group = luckPerms.getGroupManager().getGroup(args[1]).getName();
 
 		if (PlayerUtil.hasPerm(sender, "youtube.add")) {
@@ -73,7 +73,7 @@ public class AddCommand extends SimpleSubCommand {
 
 
 				if (AllowedRanks.contains(args[1])) {
-					ExecuteCommand(group, targetUUID);
+					manageRank(group, targetUUID, player.getName());
 					return;
 				}
 				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
