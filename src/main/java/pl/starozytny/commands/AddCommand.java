@@ -24,34 +24,35 @@ public class AddCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
-	public CompletableFuture<Boolean> isMiniyt(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
-				});
+	public CompletableFuture<Boolean> hasGroup(UUID who) {
+		switch (args[1]) {
+			case "miniyt":
+				return luckPerms.getUserManager().loadUser(who)
+						.thenApplyAsync(user -> {
+							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
+						});
+			case "media":
+				return luckPerms.getUserManager().loadUser(who)
+						.thenApplyAsync(user -> {
+							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
+						});
+			case "media+":
+				return luckPerms.getUserManager().loadUser(who)
+						.thenApplyAsync(user -> {
+							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
+						});
+		}
+		return null;
 	}
 
-	public CompletableFuture<Boolean> isMedia(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
-				});
-	}
-
-	public CompletableFuture<Boolean> isMediaplus(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
-				});
-	}
 
 	public boolean ExecuteCommand(UUID who) {
 		switch (args[1]) {
 			case "miniyt":
-				isMiniyt(who).thenAcceptAsync(result -> {
+				hasGroup(who).thenAcceptAsync(result -> {
 					if (!result) {
 						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
 						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
@@ -64,7 +65,7 @@ public class AddCommand extends SimpleSubCommand {
 				});
 				return false;
 			case "media":
-				isMedia(who).thenAcceptAsync(result -> {
+				hasGroup(who).thenAcceptAsync(result -> {
 					if (!result) {
 						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
 						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
@@ -79,7 +80,7 @@ public class AddCommand extends SimpleSubCommand {
 				});
 				return false;
 			case "media+":
-				isMediaplus(who).thenAcceptAsync(result -> {
+				hasGroup(who).thenAcceptAsync(result -> {
 					if (!result) {
 						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
 						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
