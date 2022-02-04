@@ -50,50 +50,18 @@ public class AddCommand extends SimpleSubCommand {
 
 
 	public boolean ExecuteCommand(UUID who) {
-		switch (args[1]) {
-			case "miniyt":
-				hasGroup(who).thenAcceptAsync(result -> {
-					if (!result) {
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+		hasGroup(who).thenAcceptAsync(result -> {
+			if (!result) {
 
-						Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-					} else {
-						Common.tell(sender, MessageFile.Error.HAVE_NOW_MINIYT);
-					}
-				});
-				return false;
-			case "media":
-				hasGroup(who).thenAcceptAsync(result -> {
-					if (!result) {
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
 
-						Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
+			} else
+				Common.tell(sender, MessageFile.Error.HAVE_NOW_RANK.replace("{rank}", args[1]));
 
-					} else {
-						Common.tell(sender, MessageFile.Error.HAVE_NOW_MEDIA);
-
-					}
-
-				});
-				return false;
-			case "media+":
-				hasGroup(who).thenAcceptAsync(result -> {
-					if (!result) {
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
-
-						Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", args[1]).replace("{player}", args[0]));
-
-					} else {
-						Common.tell(sender, MessageFile.Error.HAVE_NOW_MEDIA_PLUS);
-					}
-
-				});
-				return false;
-		}
+		});
 		return false;
 	}
 

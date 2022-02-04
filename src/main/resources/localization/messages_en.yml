@@ -11,9 +11,7 @@ Error:
   NO_MEDIA: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media"
   NO_MEDIA+: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media+"
 
-  HAVE_NOW_MINIYT: "&3[&fYou&cYube&3] &cGracz posiada już range &6miniyt"
-  HAVE_NOW_MEDIA: "&3[&fYou&cYube&3] &cGracz posiada już range &6media"
-  HAVE_NOW_MEDIA+: "&3[&fYou&cYube&3] &cGracz posiada już range &6media+"
+  HAVE_NOW_RANK: "&3[&fYou&cYube&3] &cGracz posiada już range &6{rank}"
 
 Usage:
   ADD_RANK: "&3[&fYou&cYube&3] &cPoprawnie: &6/youtube add <nick> <ranga>"

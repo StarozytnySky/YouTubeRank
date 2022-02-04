@@ -34,9 +34,7 @@ public class MessageFile extends SimpleLocalization {
 		public static String NO_MEDIA;
 		public static String NO_MEDIA_PLUS;
 
-		public static String HAVE_NOW_MINIYT;
-		public static String HAVE_NOW_MEDIA;
-		public static String HAVE_NOW_MEDIA_PLUS;
+		public static String HAVE_NOW_RANK;
 
 		private static void init() {
 
@@ -50,9 +48,7 @@ public class MessageFile extends SimpleLocalization {
 			NO_MEDIA = getString("NO_MEDIA");
 			NO_MEDIA_PLUS = getString("NO_MEDIA+");
 
-			HAVE_NOW_MINIYT = getString("HAVE_NOW_MINIYT");
-			HAVE_NOW_MEDIA = getString("HAVE_NOW_MEDIA");
-			HAVE_NOW_MEDIA_PLUS = getString("HAVE_NOW_MEDIA+");
+			HAVE_NOW_RANK = getString("HAVE_NOW_RANK");
 
 		}
 	}
