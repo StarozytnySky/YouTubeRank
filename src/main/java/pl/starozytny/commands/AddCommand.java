@@ -48,8 +48,7 @@ public class AddCommand extends SimpleSubCommand {
 		return null;
 	}
 
-
-	public boolean ExecuteCommand(UUID who) {
+	public void ExecuteCommand(UUID who) {
 		hasGroup(who).thenAcceptAsync(result -> {
 			if (!result) {
 
@@ -62,7 +61,6 @@ public class AddCommand extends SimpleSubCommand {
 				Common.tell(sender, MessageFile.Error.HAVE_NOW_RANK.replace("{rank}", args[1]));
 
 		});
-		return false;
 	}
 
 	@Override
@@ -88,16 +86,15 @@ public class AddCommand extends SimpleSubCommand {
 
 		if (PlayerUtil.hasPerm(sender, "youtube.add")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
-				if (args.length == 2) {
-					Player target = Bukkit.getPlayer(args[0]);
-					UUID targetUUID = target.getUniqueId();
-					if (AllowedRanks.contains(args[1])) {
-						ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
-						return;
-					}
-					Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
+				Player target = Bukkit.getPlayer(args[0]);
+				assert target != null;
+				UUID targetUUID = target.getUniqueId();
+				if (AllowedRanks.contains(args[1])) {
+					ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
 					return;
 				}
+				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
+				return;
 			}
 			Common.tell(sender, MessageFile.Error.YOU_ARE_NO_LIST);
 		}

@@ -7,10 +7,7 @@ Error:
   YOU_ARE_NO_LIST: "&3[&fYou&cYube&3] &cNie znajdujesz się na liście"
   TOO_MANY_ARGS: "&3[&fYou&cYube&3] &cPodano za dużo argumentów"
 
-  NO_MINIYT: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6miniyt"
-  NO_MEDIA: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media"
-  NO_MEDIA+: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6media+"
-
+  NO_HAVE_RANK: "&3[&fYou&cYube&3] &cGracz nie posiada rangi &6{rank}"
   HAVE_NOW_RANK: "&3[&fYou&cYube&3] &cGracz posiada już range &6{rank}"
 
 Usage:

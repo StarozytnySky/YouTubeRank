@@ -30,10 +30,7 @@ public class MessageFile extends SimpleLocalization {
 		public static String YOU_ARE_NO_LIST;
 		public static String TOO_MANY_ARGS;
 
-		public static String NO_MINIYT;
-		public static String NO_MEDIA;
-		public static String NO_MEDIA_PLUS;
-
+		public static String NO_HAVE_RANK;
 		public static String HAVE_NOW_RANK;
 
 		private static void init() {
@@ -44,10 +41,7 @@ public class MessageFile extends SimpleLocalization {
 			YOU_ARE_NO_LIST = getString("YOU_ARE_NO_LIST");
 			TOO_MANY_ARGS = getString("TOO_MANY_ARGS");
 
-			NO_MINIYT = getString("NO_MINIYT");
-			NO_MEDIA = getString("NO_MEDIA");
-			NO_MEDIA_PLUS = getString("NO_MEDIA+");
-
+			NO_HAVE_RANK = getString("NO_HAVE_RANK");
 			HAVE_NOW_RANK = getString("HAVE_NOW_RANK");
 
 		}

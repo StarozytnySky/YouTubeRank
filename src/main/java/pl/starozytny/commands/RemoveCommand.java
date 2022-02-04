@@ -24,77 +24,43 @@ public class RemoveCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
-	public CompletableFuture<Boolean> isMiniyt(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
-				});
-	}
-
-	public CompletableFuture<Boolean> isMedia(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
-				});
-	}
-
-	public CompletableFuture<Boolean> isMediaplus(UUID who) {
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
-				});
+	public CompletableFuture<Boolean> hasGroup(UUID who) {
+		switch (args[1]) {
+			case "miniyt":
+				return luckPerms.getUserManager().loadUser(who)
+						.thenApplyAsync(user -> {
+							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
+						});
+			case "media":
+				return luckPerms.getUserManager().loadUser(who)
+						.thenApplyAsync(user -> {
+							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
+						});
+			case "media+":
+				return luckPerms.getUserManager().loadUser(who)
+						.thenApplyAsync(user -> {
+							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
+						});
+		}
+		return null;
 	}
 
 	public boolean ExecuteCommand(UUID who) {
-		switch (args[1]) {
-			case "miniyt":
-				isMiniyt(who).thenAcceptAsync(result -> {
-					if (result) {
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+		hasGroup(who).thenAcceptAsync(result -> {
+			if (result) {
 
-						Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
 
-					} else {
-						Common.tell(sender, MessageFile.Error.NO_MINIYT);
+				Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
 
-					}
-				});
-				return false;
-			case "media":
-				isMedia(who).thenAcceptAsync(result -> {
-					if (result) {
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+			} else
+				Common.tell(sender, MessageFile.Error.NO_HAVE_RANK.replace("{rank}", args[1]));
 
-						Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
-
-					} else {
-						Common.tell(sender, MessageFile.Error.NO_MEDIA);
-
-					}
-
-				});
-				return false;
-			case "media+":
-				isMediaplus(who).thenAcceptAsync(result -> {
-					if (result) {
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-						Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
-
-						Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
-
-					} else {
-						Common.tell(sender, MessageFile.Error.NO_MEDIA_PLUS);
-
-					}
-
-				});
-				return false;
-		}
+		});
 		return false;
 	}
 
@@ -121,16 +87,14 @@ public class RemoveCommand extends SimpleSubCommand {
 
 		if (PlayerUtil.hasPerm(sender, "youtube.remove")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
-				if (args.length == 2) {
-					Player target = Bukkit.getPlayer(args[0]);
-					UUID targetUUID = target.getUniqueId();
-					if (AllowedRanks.contains(args[1])) {
-						ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
-						return;
-					}
-					Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
+				Player target = Bukkit.getPlayer(args[0]);
+				UUID targetUUID = target.getUniqueId();
+				if (AllowedRanks.contains(args[1])) {
+					ExecuteCommand(UUID.fromString(String.valueOf(targetUUID)));
 					return;
 				}
+				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
+				return;
 			}
 			Common.tell(sender, MessageFile.Error.YOU_ARE_NO_LIST);
 		}
