@@ -24,7 +24,6 @@ public class AddCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
-
 	public CompletableFuture<Boolean> hasGroup(String group, UUID who) {
 
 		return luckPerms.getUserManager().loadUser(who)

@@ -24,41 +24,26 @@ public class RemoveCommand extends SimpleSubCommand {
 
 	LuckPerms luckPerms = LuckPermsProvider.get();
 
-	public CompletableFuture<Boolean> hasGroup(UUID who) {
-		switch (args[1]) {
-			case "miniyt":
-				return luckPerms.getUserManager().loadUser(who)
-						.thenApplyAsync(user -> {
-							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("miniyt"));
-						});
-			case "media":
-				return luckPerms.getUserManager().loadUser(who)
-						.thenApplyAsync(user -> {
-							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media"));
-						});
-			case "media+":
-				return luckPerms.getUserManager().loadUser(who)
-						.thenApplyAsync(user -> {
-							Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-							return inheritedGroups.stream().anyMatch(g -> g.getName().equals("media+"));
-						});
-		}
-		return null;
+	public CompletableFuture<Boolean> hasGroup(String group, UUID who) {
+
+		return luckPerms.getUserManager().loadUser(who)
+				.thenApplyAsync(user -> {
+					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
+					return inheritedGroups.stream().anyMatch(g -> g.getName().equals(group));
+				});
 	}
 
-	public void ExecuteCommand(UUID who) {
-		hasGroup(who).thenAcceptAsync(result -> {
+	public void manageRank(String group, UUID who, String nickName) {
+		hasGroup(group, who).thenAcceptAsync(result -> {
 			if (result) {
 
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", args[0]).replace("{rank}", args[1]));
-				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", args[0]).replace("{rank}", args[1]));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_SERVER.replace("{player}", nickName).replace("{rank}", group));
+				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().REMOVE_COMMAND_BUNGEE.replace("{player}", nickName).replace("{rank}", group));
 
-				Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", args[1]).replace("{player}", args[0]));
+				Common.tell(sender, MessageFile.Success.REMOVED.replace("{rank}", group).replace("{player}", nickName));
 
 			} else
-				Common.tell(sender, MessageFile.Error.NO_HAVE_RANK.replace("{rank}", args[1]));
+				Common.tell(sender, MessageFile.Error.NO_HAVE_RANK.replace("{rank}", group));
 		});
 	}
 
@@ -76,16 +61,18 @@ public class RemoveCommand extends SimpleSubCommand {
 
 		}
 
+
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));
+		Player player = Bukkit.getPlayer(args[0]);
+		UUID targetUUID = player.getUniqueId();
+		String group = luckPerms.getGroupManager().getGroup(args[1]).getName();
 
 
 		if (PlayerUtil.hasPerm(sender, "youtube.remove")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
-				Player target = Bukkit.getPlayer(args[0]);
-				UUID targetUUID = target.getUniqueId();
 
 				if (AllowedRanks.contains(args[1])) {
-					ExecuteCommand(targetUUID);
+					manageRank(group, targetUUID, player.getName());
 					return;
 				}
 				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);
