@@ -61,12 +61,11 @@ public class RemoveCommand extends SimpleSubCommand {
 
 		}
 
-
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));
+
 		Player player = Bukkit.getPlayer(args[0]);
 		UUID targetUUID = player.getUniqueId();
 		String group = luckPerms.getGroupManager().getGroup(args[1]).getName();
-
 
 		if (PlayerUtil.hasPerm(sender, "youtube.remove")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {

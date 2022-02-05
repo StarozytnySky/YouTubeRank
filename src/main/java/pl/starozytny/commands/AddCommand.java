@@ -69,8 +69,7 @@ public class AddCommand extends SimpleSubCommand {
 
 		if (PlayerUtil.hasPerm(sender, "youtube.add")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
-
-
+				
 				if (AllowedRanks.contains(args[1])) {
 					manageRank(group, targetUUID, player.getName());
 					return;
