@@ -12,9 +12,9 @@ public class CommandGroup extends SimpleCommandGroup {
 
 	@Override
 	protected void registerSubcommands() {
-		registerSubcommand(new AddCommand(this));
-		registerSubcommand(new RemoveCommand(this));
-		registerSubcommand(new ReloadCommand(this));
+		registerSubcommand(new AddCommand());
+		registerSubcommand(new RemoveCommand());
+		registerSubcommand(new ReloadCommand());
 	}
 
 	@Override

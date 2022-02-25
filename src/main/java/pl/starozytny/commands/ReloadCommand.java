@@ -2,12 +2,12 @@ package pl.starozytny.commands;
 
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.command.SimpleSubCommand;
-import pl.starozytny.utils.ConfigFile;
-import pl.starozytny.utils.MessageFile;
+import pl.starozytny.file.ConfigFile;
+import pl.starozytny.file.MessageFile;
 
 public class ReloadCommand extends SimpleSubCommand {
 
-	protected ReloadCommand(CommandGroup commandGroup) {
+	protected ReloadCommand() {
 		super("reload");
 		setPermission("youtube.reload");
 		setPermissionMessage(MessageFile.Error.NO_PERMISSION);

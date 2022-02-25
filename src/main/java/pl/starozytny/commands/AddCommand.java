@@ -1,45 +1,33 @@
 package pl.starozytny.commands;
 
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.mineacademy.fo.Common;
 import org.mineacademy.fo.PlayerUtil;
 import org.mineacademy.fo.command.SimpleSubCommand;
-import pl.starozytny.utils.ConfigFile;
-import pl.starozytny.utils.MessageFile;
+import pl.starozytny.YouTubeRank;
+import pl.starozytny.file.ConfigFile;
+import pl.starozytny.file.MessageFile;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class AddCommand extends SimpleSubCommand {
 
-	protected AddCommand(CommandGroup commandGroup) {
+	protected AddCommand() {
 		super("add");
 		setPermission("youtube.add");
 		setPermissionMessage(MessageFile.Error.NO_PERMISSION);
 	}
 
-	LuckPerms luckPerms = LuckPermsProvider.get();
+	private void manageRank(String group, UUID who, String nickName) {
 
-	public CompletableFuture<Boolean> hasGroup(String group, UUID who) {
-
-		return luckPerms.getUserManager().loadUser(who)
-				.thenApplyAsync(user -> {
-					Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-					return inheritedGroups.stream().anyMatch(g -> g.getName().equals(group));
-				});
-	}
-
-	public void manageRank(String group, UUID who, String nickName) {
-		hasGroup(group, who).thenAcceptAsync(result -> {
+		YouTubeRank.getInstance().hasGroup(group, who, nickName).thenAcceptAsync(result -> {
 			if (!result) {
 
 				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_SERVER.replace("{player}", nickName).replace("{rank}", group));
 				Common.dispatchCommand(Bukkit.getConsoleSender(), ConfigFile.getInstance().ADD_COMMAND_BUNGEE.replace("{player}", nickName).replace("{rank}", group));
-
 				Common.tell(sender, MessageFile.Success.ADDED.replace("{rank}", group).replace("{player}", nickName));
 
 			} else
@@ -47,6 +35,7 @@ public class AddCommand extends SimpleSubCommand {
 		});
 	}
 
+	@Deprecated
 	@Override
 	protected void onCommand() {
 
@@ -63,15 +52,14 @@ public class AddCommand extends SimpleSubCommand {
 
 		List<String> AllowedRanks = new ArrayList<>(Arrays.asList("miniyt", "media", "media+"));
 
-		Player player = Bukkit.getPlayer(args[0]);
-		UUID targetUUID = player.getUniqueId();
-		String group = luckPerms.getGroupManager().getGroup(args[1]).getName();
+		String group = args[1];
+		String playerName = args[0];
+		UUID playerUUID = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
 
 		if (PlayerUtil.hasPerm(sender, "youtube.add")) {
 			if (ConfigFile.getInstance().ALLOWED_USERS.contains(sender.getName())) {
-				
 				if (AllowedRanks.contains(args[1])) {
-					manageRank(group, targetUUID, player.getName());
+					manageRank(group, playerUUID, playerName);
 					return;
 				}
 				Common.tell(sender, MessageFile.Error.ONLY_SPECIFIC_RANK);

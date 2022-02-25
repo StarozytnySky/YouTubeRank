@@ -1,4 +1,4 @@
-package pl.starozytny.utils;
+package pl.starozytny.file;
 
 import lombok.Getter;
 import org.mineacademy.fo.collection.SerializedMap;

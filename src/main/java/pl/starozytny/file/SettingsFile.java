@@ -1,4 +1,4 @@
-package pl.starozytny.utils;
+package pl.starozytny.file;
 
 import org.mineacademy.fo.settings.SimpleSettings;
 
