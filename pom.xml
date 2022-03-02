@@ -40,7 +40,8 @@
         <dependency>
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
-            <version>5.3</version>
+            <version>5.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -111,7 +112,6 @@
                     <artifactSet>
                         <includes>
                             <include>${foundation.path}:Foundation*</include>
-                            <include>mysql:mysql-connector-java*</include>
                         </includes>
                     </artifactSet>
                     <relocations>

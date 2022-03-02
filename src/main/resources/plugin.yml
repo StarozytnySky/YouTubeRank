@@ -4,7 +4,9 @@ main: ${main.class}
 api-version: 1.13
 author: ${author}
 
+depend: [ LuckPerms ]
+
 commands:
 
-libraries:
-  - org.openjdk.nashorn:nashorn-core:15.3
+#libraries:
+#  - org.openjdk.nashorn:nashorn-core:15.3

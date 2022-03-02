@@ -15,6 +15,7 @@ public class CommandGroup extends SimpleCommandGroup {
 		registerSubcommand(new AddCommand());
 		registerSubcommand(new RemoveCommand());
 		registerSubcommand(new ReloadCommand());
+		//registerSubcommand(new ViewCommand());
 	}
 
 	@Override
