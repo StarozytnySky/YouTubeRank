@@ -4,7 +4,6 @@ import lombok.Getter;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
-import org.mineacademy.fo.Common;
 import org.mineacademy.fo.plugin.SimplePlugin;
 import org.mineacademy.fo.settings.YamlStaticConfig;
 import pl.starozytny.commands.CommandGroup;
@@ -17,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class YouTubeRank extends SimplePlugin {
 
@@ -52,17 +50,6 @@ public class YouTubeRank extends SimplePlugin {
 
 		return userFuture.thenApplyAsync(user -> {
 			Collection<Group> inheritedGroups = user.getInheritedGroups(user.getQueryOptions());
-
-			try {
-				if (userFuture.get().getUsername() == null) {
-					Common.broadcast("User no exist");
-
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
 
 			return inheritedGroups.stream().anyMatch(g -> g.getName().equals(group));
 		});
